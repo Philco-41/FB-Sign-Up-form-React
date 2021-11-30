@@ -4,7 +4,8 @@ import CustomGender from "./CustomGender";
 import { GoX } from "react-icons/go";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaQuestionCircle } from "react-icons/fa";
-import Data from "./Data";
+
+import axios from "axios";
 
 function Signup(props) {
   const date = new Date();
@@ -173,6 +174,7 @@ function Signup(props) {
       setyearOfBirth(e.target.value);
     }
   }
+
   function submitHandler(e) {
     e.preventDefault();
     if (firstName.trim() === "") {
@@ -198,19 +200,21 @@ function Signup(props) {
         props.CNAstate(false);
         alert("your account have been successfully created");
       }
-    }
+      const dataObj = {
+        firstName,
+        lastName,
+        emailOrPhone,
+        password,
+        gender,
+        dayOfBirth,
+        monthOfBirth,
+        yearOfBirth,
+      };
 
-    const dataObj = {
-      firstName: firstName,
-      lastName: lastName,
-      emailOrPhone: emailOrPhone,
-      password: password,
-      gender: gender,
-      dayOfBirth: dayOfBirth,
-      monthOfBirth: monthOfBirth,
-      yearOfBirth: yearOfBirth,
-    };
-    Data.push(dataObj);
+      axios
+        .post("http://localhost:5000/CreateAccount", dataObj)
+        .then((res) => console.log(res.data));
+    }
   }
   return (
     <form className={"SUcontainer"}>

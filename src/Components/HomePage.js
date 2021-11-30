@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./HpStyles.css";
-import Data from "./Data";
+
 import Signup from "./Signup";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function HomePage() {
   const [emailOrPhone, setemailOrPhone] = useState("");
@@ -19,23 +20,28 @@ function HomePage() {
   }
 
   function loginHandler() {
-    if (emailOrPhone === "") {
-      setloginfailmsg("We cannot find any account attached to this email");
-    }
-    Data.forEach((item) => {
-      if (
-        item.password === password &&
-        (item.emailOrPhone === emailOrPhone ||
-          item.emailOrPhone === emailOrPhone)
-      ) {
-        setlogCheck(true);
-        setloginfailmsg("");
-      } else if (item.emailOrPhone !== emailOrPhone || emailOrPhone === "") {
-        setloginfailmsg(
-          "The email or phone number that you've entered is incorrect."
-        );
-      } else if (item.password !== password || password === "") {
-        setloginfailmsg("The password that you've entered is incorrect.");
+    axios.get("http://localhost:5000/login").then((res) => {
+      for (let i = 0; i < res.data.length; i++) {
+        if (
+          emailOrPhone.trim() === "" ||
+          res.data[i].emailOrPhone !== emailOrPhone
+        ) {
+          setloginfailmsg(
+            "The email or phone number that you've entered is incorrect."
+          );
+        } else if (
+          password.trim() === "" ||
+          res.data[i].password !== password
+        ) {
+          setloginfailmsg("The password that you've entered is incorrect.");
+        } else if (
+          res.data[i].emailOrPhone === emailOrPhone &&
+          res.data[i].password === password
+        ) {
+          setlogCheck(true);
+          setloginfailmsg("");
+          break;
+        }
       }
     });
   }
