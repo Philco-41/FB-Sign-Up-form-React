@@ -1,3 +1,4 @@
+#start the app by running node server.js after navigating to backend folder using cd command to run server then run npm start to launch the app from the src folder
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
